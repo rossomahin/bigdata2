@@ -6,12 +6,12 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
-# 1. Загрузка данных
+# Загрузка данных
 iris = load_iris()
 X = iris.data
 y = iris.target
 
-# 2. Разделение данных на обучающую и тестовую выборки
+# Разделение данных на обучающую и тестовую выборки
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
 # Переменные для хранения лучших результатов
@@ -19,16 +19,16 @@ best_accuracy = 0
 best_max_depth = None
 best_max_leaf_nodes = None
 
-# 3. Обучение модели Random Forest с различными параметрами
+# Обучение модели Random Forest с различными параметрами
 for max_depth in range(1, 6):
     for max_leaf_nodes in range(2, 11):
         model = RandomForestClassifier(n_estimators=200, max_depth=max_depth, max_leaf_nodes=max_leaf_nodes, criterion='entropy', random_state=42)
         model.fit(X_train, y_train)
         y_pred = model.predict(X_test)
 
-        # 4. Оценка ошибки классификации
+        # Оценка ошибки классификации
         accuracy = accuracy_score(y_test, y_pred)
-        error = 1 - accuracy  # Ошибка классификации
+        error = 1 - accuracy
 
         if error < best_accuracy or best_accuracy == 0:
             best_accuracy = error
@@ -39,18 +39,16 @@ for max_depth in range(1, 6):
 print(f"Оптимальная max_depth: {best_max_depth}, max_leaf_nodes: {best_max_leaf_nodes}")
 print(f"Средняя ошибка на тестовой выборке: {best_accuracy:.4f}")
 
-# 5. Визуализация результатов
+# Визуализация результатов
 # График реальных сортов ириса
 plt.figure(figsize=(12, 6))
 
-# Реальные сорта
 plt.subplot(1, 2, 1)
 plt.title("Реальные сорта ириса")
 plt.scatter(X_test[:, 0], X_test[:, 1], c=y_test, cmap='viridis', edgecolor='k')
 plt.xlabel(iris.feature_names[0])
 plt.ylabel(iris.feature_names[1])
 
-# Предсказанные сорта
 plt.subplot(1, 2, 2)
 plt.title("Предсказанные сорта ириса")
 y_pred = model.predict(X_test)
